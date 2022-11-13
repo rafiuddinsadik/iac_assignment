@@ -57,5 +57,5 @@ resource "aws_route_table" "ig_rt" {
 
 resource "aws_route_table_association" "webserver_to_ig" {
   subnet_id      = aws_subnet.webserver_subnet.id
-  route_table_id = aws_route_table.ig_rt
+  route_table_id = aws_route_table.ig_rt.id
 }
