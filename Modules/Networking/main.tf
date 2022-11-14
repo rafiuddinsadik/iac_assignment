@@ -55,7 +55,35 @@ resource "aws_route_table" "ig_rt" {
   }
 }
 
+# Associating subnets to route tables
 resource "aws_route_table_association" "webserver_to_ig" {
   subnet_id      = aws_subnet.webserver_subnet.id
   route_table_id = aws_route_table.ig_rt.id
+}
+
+# Creating Security Groups
+resource "aws_security_group" "webserver_sg" {
+  name        = "Web_SG"
+  description = "Security Group for the webserver"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description      = "HTTP"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description      = "SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Web_SG"
+  }
 }
