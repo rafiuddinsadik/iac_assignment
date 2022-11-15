@@ -1,33 +1,32 @@
 # Creating a VPC
 resource "aws_vpc" "main" {
-  cidr_block       = "192.168.0.0/16"
+  cidr_block       = "${var.cidr_block}"
   instance_tenancy = "default"
 
   tags = {
     Name = "Rafi Vpc"
-    Owner = "Rafi"
   }
 }
 
 # Creating 2 subnets - Webserver & DB
 resource "aws_subnet" "webserver_subnet" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "192.168.1.0/24"
-  availability_zone = "us-east-1a"
+  cidr_block = "${var.cidr_subnet_webserver}"
+  availability_zone = "${var.web_subnet_az}"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "192.168.1.0/24 - Webserver"
+    Name = join(" - ", ["${var.cidr_subnet_webserver}", "Webserver"])
   }
 }
 
 resource "aws_subnet" "db_subnet" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "192.168.2.0/24"
-  availability_zone = "us-east-1b"
+  cidr_block = "${var.cidr_subnet_db}"
+  availability_zone = "${var.db_subnet_az}"
 
   tags = {
-    Name = "192.168.2.0/24 - Database"
+    Name = join(" - ", ["${var.cidr_subnet_db}", "Database"])
   }
 }
 
@@ -37,7 +36,6 @@ resource "aws_internet_gateway" "igw" {
 
   tags = {
     Name = "main"
-    Owner = "Rafi"
   }
 }
 
@@ -63,7 +61,6 @@ resource "aws_route_table_association" "webserver_to_ig" {
 
 # Creating Security Groups
 resource "aws_security_group" "webserver_sg" {
-  name        = "Web_SG"
   description = "Security Group for the webserver"
   vpc_id      = aws_vpc.main.id
 
@@ -75,15 +72,48 @@ resource "aws_security_group" "webserver_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+  tags = {
+    Name = "Web_SG"
+  }
+}
+
+resource "aws_security_group" "dbserver_sg" {
+  description = "Security Group for the database server"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description      = "HTTP"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+  }
+
+  ingress {
+    description      = "All ICMP ipv4"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+  }
+
+  ingress {
+    description      = "MYSQL/Aurora"
+    from_port        = 3306
+    to_port          = 3306
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+  }
+
   ingress {
     description      = "SSH"
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
   }
 
   tags = {
-    Name = "Web_SG"
+    Name = "DB_SG"
   }
 }
