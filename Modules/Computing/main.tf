@@ -5,7 +5,7 @@ resource "aws_instance" "webserver" {
   availability_zone = "${var.webserver_az}"
 
   subnet_id                   = "${var.webserver_subnet_id}"
-  vpc_security_group_ids      = "${var.webserver_secgrp_id}"
+  vpc_security_group_ids      = ["${var.webserver_secgrp_id}"]
   associate_public_ip_address = true
 
   tags = {
@@ -33,7 +33,7 @@ resource "aws_instance" "db_server" {
   availability_zone = "${var.dbserver_az}"
 
   subnet_id                   = "${var.db_subnet_id}"
-  vpc_security_group_ids      = "${var.db_secgrp_id}"
+  vpc_security_group_ids      = ["${var.db_secgrp_id}"]
   associate_public_ip_address = false
 
   key_name = aws_key_pair.dbkp.key_name
