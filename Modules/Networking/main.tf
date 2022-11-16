@@ -16,7 +16,7 @@ resource "aws_subnet" "webserver_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = join(" - ", ["${var.cidr_subnet_webserver}", "Webserver"])
+    Name = join(" - ", [var.cidr_subnet_webserver, "Webserver"])
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_subnet" "db_subnet" {
   availability_zone = "${var.db_subnet_az}"
 
   tags = {
-    Name = join(" - ", ["${var.cidr_subnet_db}", "Database"])
+    Name = join(" - ", [var.cidr_subnet_db, "Database"])
   }
 }
 
@@ -86,15 +86,15 @@ resource "aws_security_group" "dbserver_sg" {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+    cidr_blocks      = [var.cidr_subnet_webserver]
   }
 
   ingress {
     description      = "All ICMP ipv4"
-    from_port        = 0
-    to_port          = 0
+    from_port        = -1
+    to_port          = -1
     protocol         = "icmp"
-    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+    cidr_blocks      = [var.cidr_subnet_webserver]
   }
 
   ingress {
@@ -102,7 +102,7 @@ resource "aws_security_group" "dbserver_sg" {
     from_port        = 3306
     to_port          = 3306
     protocol         = "tcp"
-    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+    cidr_blocks      = [var.cidr_subnet_webserver]
   }
 
   ingress {
@@ -110,7 +110,7 @@ resource "aws_security_group" "dbserver_sg" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["${var.cidr_subnet_webserver}"]
+    cidr_blocks      = [var.cidr_subnet_webserver]
   }
 
   tags = {
