@@ -1,6 +1,6 @@
 # Creating a VPC
 resource "aws_vpc" "main" {
-  cidr_block       = "${var.cidr_block}"
+  cidr_block       = var.cidr_block
   instance_tenancy = "default"
 
   tags = {
@@ -11,8 +11,8 @@ resource "aws_vpc" "main" {
 # Creating 2 subnets - Webserver & DB
 resource "aws_subnet" "webserver_subnet" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "${var.cidr_subnet_webserver}"
-  availability_zone = "${var.web_subnet_az}"
+  cidr_block = var.cidr_subnet_webserver
+  availability_zone = var.web_subnet_az
   map_public_ip_on_launch = true
 
   tags = {
@@ -22,8 +22,8 @@ resource "aws_subnet" "webserver_subnet" {
 
 resource "aws_subnet" "db_subnet" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "${var.cidr_subnet_db}"
-  availability_zone = "${var.db_subnet_az}"
+  cidr_block = var.cidr_subnet_db
+  availability_zone = var.db_subnet_az
 
   tags = {
     Name = join(" - ", [var.cidr_subnet_db, "Database"])
