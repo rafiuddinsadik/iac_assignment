@@ -117,3 +117,32 @@ resource "aws_security_group" "dbserver_sg" {
     Name = "DB_SG"
   }
 }
+
+# Creating a NAT Gateway
+# Generate Elastic IP
+resource "aws_eip" "for_nat" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat_for_db" {
+  allocation_id = aws_eip.for_nat.id
+  subnet_id     = aws_subnet.db_subnet.id
+
+  tags = {
+    Name = "Rafi NAT"
+  }
+}
+
+# Modify VPC Defailt Route Table for NAT
+resource "aws_default_route_table" "def_rt" {
+  default_route_table_id = aws_vpc.main.default_route_table_id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_for_db.id
+  }
+
+  tags = {
+    Name = "Main RT - Rafi VPC"
+  }
+}
