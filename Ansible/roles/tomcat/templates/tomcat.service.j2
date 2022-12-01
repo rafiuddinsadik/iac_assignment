@@ -7,7 +7,7 @@ Type=oneshot
 Environment=CATALINA_PID=/opt/{{ owner }}/temp/{{ owner }}.pid
 Environment=CATALINA_HOME=/opt/{{ owner }}
 Environment=CATALINA_BASE=/opt/{{ owner }}
-Environment='CATALINA_OPTS=-{{ Xmx_value }} -{{ Xmx_value }} -Dspring.profiles.active={{ env }} {% if env == "prod" or env == "lt" or ( env == "uat" and (module_name == "cps-api" or module_name == "cps-api-callback" or module_name == "paybill-cps-api")) %} {{ tomcat.newrelic_parameter }} {% endif %}-server -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:MaxMetaspaceExpansion=128M -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath="/opt/{{ owner }}/logs/java_heapdump.hprof"'
+Environment='CATALINA_OPTS=-Xms2048M -Xms2048M -Dspring.profiles.active=test -server -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:MaxMetaspaceExpansion=128M -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath="/opt/{{ owner }}/logs/java_heapdump.hprof"'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 ExecStart=/opt/{{ owner }}/bin/startup.sh
 ExecStop=/opt/{{ owner }}/bin/shutdown.sh
