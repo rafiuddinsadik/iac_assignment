@@ -1,82 +1,44 @@
 ---
-
-- name: jdk folder creation
-  file:
-    path: /opt/jdk
-    state: directory
-- name: user creation
+- name: Create a Tomcat User
   user:
-    name: "{{ owner }}"
-    comment: "{{ owner }}"
-    home: /opt/{{ owner }}
-- name: OpenJdk 11 installation from source
-  unarchive:
-    src: https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
-    dest: /opt/jdk
-    extra_opts: [--strip-components=1]
-    remote_src: yes
-- name: copy jdk11 environment file to profile
-  copy:
-    src: jdk11.sh
-    dest: /etc/profile.d/
-- name: source jdk11 environment file
-  shell: source /etc/profile.d/jdk11.sh
-- name: java alternatives path installation
-  command: alternatives --install /usr/bin/java java /opt/jdk/bin/java 2
-- name: Extract tomcat9 zip file
-  unarchive:
-    src: https://bkash-devops-tools.s3.ap-southeast-1.amazonaws.com/apache-tomcat-9.0.62.tar.gz
-    dest: /opt/{{ owner }}
-    extra_opts: [--strip-components=1]
-    owner: "{{ owner }}"
-    group: "{{ group }}"
-    remote_src: yes
-- name: Remove default files and folder from tomcat
+    name: tomcat
+
+- name: Create a Tomcat Group
+  group:
+    name: tomcat
+
+- name: Create a Tomcat Directory
   file:
-    path: /opt/{{ owner }}/webapps/{{ item }}
-    state: absent
-  with_items:
-  - ROOT/asf-logo-wide.svg
-  - ROOT/bg-button.png
-  - ROOT/bg-middle.png
-  - ROOT/bg-nav.png
-  - ROOT/bg-upper.png
-  - ROOT/favicon.ico
-  - ROOT/index.jsp
-  - ROOT/RELEASE-NOTES.txt
-  - ROOT/tomcat.css
-  - ROOT/tomcat.gif
-  - ROOT/tomcat.png
-  - ROOT/tomcat-power.gif
-  - ROOT/tomcat.svg
-  - ROOT/WEB-INF
-  - docs
-  - examples
-  - host-manager
-  - manager
-- name: copy tomcat system service
-  template:
-    src: tomcat.service.j2
-    dest: /usr/lib/systemd/system/tomcat9.service
-- name: tomcat service enable
-  systemd:
-    name: tomcat9
-    enabled: yes
-    masked: no
-- name: tomcat Server XML file Copy
-  template:
-    src: server.xml.j2
-    dest: /opt/{{ owner }}/conf/server.xml
-    backup: yes
-#  when:
-#    - module_name == "app-proxy" or module_name == "authentication"
-- name: tomcat Web XML file Copy
+    path: /opt/tomcat10
+    owner: tomcat
+    group: tomcat
+    mode: 755
+    recurse: yes
+
+- name: download & unarchive tomcat10 
+  unarchive:
+    src: https://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.4/bin/apache-tomcat- 10.0.4.tar.gz
+    dest: /opt/tomcat10
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Change ownership of tomcat directory
+  file:
+    path: /opt/tomcat10
+    owner: tomcat
+    group: tomcat
+    mode: "u+rwx,g+rx,o=rx"
+    recurse: yes
+    state: directory
+
+- name: Copy Tomcat service from local to remote
   copy:
-    src: web.xml
-    dest: /opt/{{ owner }}/conf/
-    backup: yes
-  notify: Restart Tomcat
-- name: Force a restart if configuration has changed
-  meta: flush_handlers
-- name: sleep timeout
-  shell: sleep 10s
+    src: /etc/tomcat.service
+    dest: /etc/systemd/system/
+    mode: 0755
+
+- name: Start and Enable Tomcat 10 on sever
+  systemd:
+    name: tomcat
+    state: started
+    daemon_reload: true
