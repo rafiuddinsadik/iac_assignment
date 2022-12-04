@@ -21,7 +21,7 @@ pipeline{
         stage("Generating Machine Image"){
             steps {
                 dir("Packer"){
-                    sh "packer build capp-common.json"
+                    sh "packer build packer.json"
                 }
             }
         }
