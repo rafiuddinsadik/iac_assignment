@@ -14,7 +14,10 @@ pipeline{
 
         stage("Building Source Code"){
             steps {
-                sh "mvn clean package"
+                sh ''' 
+                mvn clean package
+                cp /var/lib/jenkins/workspace/assignment_deployment/target/myproject-1.war /var/lib/jenkins/workspace/assignment_deployment/Ansible/myproject-1.war
+                '''
             }
         }
 
