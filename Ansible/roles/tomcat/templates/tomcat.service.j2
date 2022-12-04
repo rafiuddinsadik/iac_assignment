@@ -8,13 +8,13 @@ Type=forking
 User=tomcat
 Group=tomcat
 
-WorkingDirectory=/var/tomcat/%i
+WorkingDirectory=/opt/tomcat/%i
 
 Environment="JAVA_HOME=/opt/jdk"
 Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
 
-Environment="CATALINA_PID=/var/tomcat/%i/run/tomcat.pid"
-Environment="CATALINA_BASE=/var/tomcat/%i/"
+Environment="CATALINA_PID=/opt/tomcat/%i/run/tomcat.pid"
+Environment="CATALINA_BASE=/opt/tomcat/%i/"
 Environment="CATALINA_HOME=/opt/tomcat/"
 Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
