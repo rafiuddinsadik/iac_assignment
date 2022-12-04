@@ -6,7 +6,7 @@ pipeline{
     }
     stages {
 
-        stage("Building Source Code"){
+        stage("Fetching Source Code"){
             steps {
                 git 'https://github.com/dannybritto96/HelloWorld-WAR'
             }
