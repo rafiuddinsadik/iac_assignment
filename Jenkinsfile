@@ -18,6 +18,12 @@ pipeline{
             }
         }
 
+        stage("Fetching Infra Codebase"){
+            steps {
+                git 'https://github.com/rafiuddinsadik/iac_assignment.git'
+            }
+        }
+
         stage("Generating Machine Image"){
             steps {
                 dir("Packer"){
