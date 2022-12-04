@@ -9,16 +9,16 @@
 
 - name: Create a Tomcat Directory
   file:
-    path: /opt/tomcat10
+    path: /opt/tomcat9
     owner: tomcat
     group: tomcat
     mode: 755
     recurse: yes
 
-- name: download & unarchive tomcat10 
+- name: download & unarchive tomcat9
   unarchive:
-    src: https://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.4/bin/apache-tomcat- 10.0.4.tar.gz
-    dest: /opt/tomcat10
+    src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.69/bin/apache-tomcat-9.0.69.tar.gz
+    dest: /opt/tomcat9
     remote_src: yes
     extra_opts: [--strip-components=1]
 
