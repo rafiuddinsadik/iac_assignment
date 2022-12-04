@@ -39,7 +39,7 @@
 
 - name: Copy Built Artifact from local to remote
   copy:
-    src: /target/myproject-1.war
+    src: /var/lib/jenkins/workspace/assignment_deployment/target/myproject-1.war
     dest: /opt/tomcat/webapps/hello.war
     mode: 0755
     remote_src: yes
