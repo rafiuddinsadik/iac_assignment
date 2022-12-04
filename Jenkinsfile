@@ -9,7 +9,11 @@ pipeline{
         stage("Building Source Code"){
             steps {
                 git 'https://github.com/dannybritto96/HelloWorld-WAR'
-                sh "cd HelloWorld-WAR"
+            }
+        }
+
+        stage("Building Source Code"){
+            steps {
                 sh "mvn clean package"
             }
         }
