@@ -18,9 +18,13 @@ pipeline{
             }
         }
 
-        // stage("Generating Machine Image"){
-            
-        // }
+        stage("Generating Machine Image"){
+            steps {
+                dir("Packer"){
+                    sh "packer build capp-common.json"
+                }
+            }
+        }
 
         // stage("Infra Creation"){
             

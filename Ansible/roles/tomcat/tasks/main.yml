@@ -37,6 +37,12 @@
     dest: /etc/systemd/system/tomcat.service
     mode: 0755
 
+- name: Copy Built Artifact from local to remote
+  copy:
+    src: /var/lib/jenkins/workspace/assignment_deployment/target/myproject-1.war
+    dest: /opt/tomcat/webapps/hello.war
+    mode: 0755
+
 - name: Start and Enable Tomcat 9 on sever
   systemd:
     name: tomcat
