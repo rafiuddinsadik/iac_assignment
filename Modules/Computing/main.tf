@@ -1,6 +1,20 @@
+# Fetch AMI id
+data "aws_ami" "webserver_ami" {
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  filter {
+    name   = "tag:Name"
+    values = ["springRestHelloWorld-*"]
+  }
+  owners      = ["self"]
+  most_recent = true
+}
+
 # Webserver Instance
 resource "aws_instance" "webserver" {
-  ami           = var.ami_id
+  ami           = data.aws_ami.webserver_ami.id
   instance_type = var.ami_type
   availability_zone = var.webserver_az
 
