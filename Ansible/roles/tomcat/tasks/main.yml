@@ -46,7 +46,7 @@
 
 - name: copy artifact to target node
   synchronize:
-    src: target/myproject-1.war
+    src: ../target/myproject-1.war
     dest: /opt/tomcat/webapps/hello.war
     recursive: no
 
