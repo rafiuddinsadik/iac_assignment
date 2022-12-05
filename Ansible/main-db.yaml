@@ -1,0 +1,11 @@
+---
+- hosts: all
+  connection: ssh
+  gather_facts: True
+  become: yes
+
+  pre_tasks:
+  - name: Upgrade all packages
+    ansible.builtin.yum:
+      name: '*'
+      state: latest

@@ -6,16 +6,16 @@
         "source_ami": "ami-0b0dcb5067f052a63",
         "instance_type": "t2.micro",
         "ssh_username": "ec2-user",
-        "ami_name": "springRestHelloWorld-{{timestamp}}",
+        "ami_name": "spring-{{user `type`}}-{{timestamp}}",
         "tags": {
-          "Name" : "springRestHelloWorld-{{timestamp}}"
+          "Name" : "spring-{{user `type`}}-{{timestamp}}"
          }      
       }
     ],
     "provisioners": [
       {
         "type": "ansible",
-        "playbook_file": "../Ansible/main.yml"
+        "playbook_file": "../Ansible/main-{{user `type`}}.yml"
       }
     ]
 }

@@ -26,9 +26,21 @@ pipeline{
         }
 
         stage("Generating Machine Image"){
-            steps {
-                dir("Packer"){
-                    sh "packer build packer.json"
+            matrix {
+                axes {
+                    axis {
+                        name 'TYPES'
+                        values "web", "db"
+                    }
+                }
+                stages {
+                    stage('Packer Build') {
+                        steps {
+                            dir("Packer"){
+                                sh "packer build -var 'type=${TYPES}' packer.json"
+                            }
+                        }
+                    }
                 }
             }
         }
