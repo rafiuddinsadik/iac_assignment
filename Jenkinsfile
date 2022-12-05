@@ -21,7 +21,7 @@ pipeline{
         stage("Fetching Infra Codebase"){
             steps {
                 git 'https://github.com/rafiuddinsadik/iac_assignment.git'
-                sh "cp /var/lib/jenkins/workspace/assignment_deployment/target/myproject-1.war /var/lib/jenkins/workspace/assignment_deployment/Ansible/myproject-1.war"
+                // sh "cp /var/lib/jenkins/workspace/assignment_deployment/target/myproject-1.war /var/lib/jenkins/workspace/assignment_deployment/Ansible/myproject-1.war"
             }
         }
 
