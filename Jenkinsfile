@@ -34,7 +34,7 @@ pipeline{
                     }
                 }
                 stages {
-                    stage(''${TYPES}' AMI Build') {
+                    stage('AMI Build') {
                         steps {
                             dir("Packer"){
                                 sh "packer build -var 'type=${TYPES}' packer.json"
