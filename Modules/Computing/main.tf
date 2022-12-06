@@ -1,12 +1,25 @@
-# Fetch AMI id
-data "aws_ami" "webserver_ami" {
+# Fetch AMI id(s)
+data "aws_ami" "web_ami" {
   filter {
     name   = "state"
     values = ["available"]
   }
   filter {
     name   = "tag:Name"
-    values = ["springRestHelloWorld-*"]
+    values = ["spring-web-*"]
+  }
+  owners      = ["self"]
+  most_recent = true
+}
+
+data "aws_ami" "db_ami" {
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  filter {
+    name   = "tag:Name"
+    values = ["spring-db-*"]
   }
   owners      = ["self"]
   most_recent = true
@@ -14,7 +27,7 @@ data "aws_ami" "webserver_ami" {
 
 # Webserver Instance
 resource "aws_instance" "webserver" {
-  ami           = data.aws_ami.webserver_ami.id
+  ami           = data.aws_ami.web_ami.id
   instance_type = var.ami_type
   availability_zone = var.webserver_az
 
@@ -42,7 +55,7 @@ resource "aws_key_pair" "dbkp" {
 
 # DB Instance
 resource "aws_instance" "db_server" {
-  ami           = var.ami_id
+  ami           = data.aws_ami.db_ami.id
   instance_type = var.ami_type
   availability_zone = var.dbserver_az
 
