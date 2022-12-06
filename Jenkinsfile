@@ -30,11 +30,11 @@ pipeline{
                 axes {
                     axis {
                         name 'TYPES'
-                        values "web", "db"
+                        values "db"
                     }
                 }
                 stages {
-                    stage('${TYPES} AMI Build') {
+                    stage("'${TYPES}' AMI Build") {
                         steps {
                             dir("Packer"){
                                 sh "packer build -var 'type=${TYPES}' packer.json"

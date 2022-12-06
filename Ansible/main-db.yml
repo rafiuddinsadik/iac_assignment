@@ -25,7 +25,7 @@
 
   - name: Install MySQL Community Server
     ansible.builtin.yum:
-      name: https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+      name: mysql-community-server
       state: present
 
   - name: Start and Enable mysql sever
