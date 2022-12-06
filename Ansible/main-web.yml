@@ -5,6 +5,9 @@
   become: yes
 
   pre_tasks:
+  - name: Update epel
+    shell: amazon-linux-extras install epel -y
+    
   - name: Upgrade all packages
     ansible.builtin.yum:
       name: '*'
