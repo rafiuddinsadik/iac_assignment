@@ -24,25 +24,25 @@ pipeline{
             }
         }
 
-        stage("Generating Machine Image"){
-            matrix {
-                axes {
-                    axis {
-                        name 'TYPES'
-                        values "web", "db"
-                    }
-                }
-                stages {
-                    stage('AMI Build') {
-                        steps {
-                            dir("Packer"){
-                                sh "packer build -var 'type=${TYPES}' packer.json"
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // stage("Generating Machine Image"){
+        //     matrix {
+        //         axes {
+        //             axis {
+        //                 name 'TYPES'
+        //                 values "web", "db"
+        //             }
+        //         }
+        //         stages {
+        //             stage('AMI Build') {
+        //                 steps {
+        //                     dir("Packer"){
+        //                         sh "packer build -var 'type=${TYPES}' packer.json"
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage("Infra init"){
             steps {
