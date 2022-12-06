@@ -6,10 +6,6 @@ variable "webserver_secgrp_id" {}
 
 variable "db_secgrp_id" {}
 
-variable "ami_id" {
-    default = "ami-0c4e4b4eb2e11d1d4"
-}
-
 variable "ami_type" {
     default = "t2.micro"
 }

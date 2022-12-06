@@ -25,21 +25,6 @@ data "aws_ami" "db_ami" {
   most_recent = true
 }
 
-# Webserver Instance
-resource "aws_instance" "webserver" {
-  ami           = data.aws_ami.web_ami.id
-  instance_type = var.ami_type
-  availability_zone = var.webserver_az
-
-  subnet_id                   = var.webserver_subnet_id
-  vpc_security_group_ids      = [var.webserver_secgrp_id]
-  associate_public_ip_address = true
-
-  tags = {
-    Name = "Webserver"
-  }
-}
-
 # Generating KeyPair for Accessing DB
 resource "tls_private_key" "dbkey" {
   algorithm = "RSA"
@@ -53,19 +38,68 @@ resource "aws_key_pair" "dbkp" {
   public_key = tls_private_key.dbkey.public_key_openssh
 }
 
-# DB Instance
-resource "aws_instance" "db_server" {
-  ami           = data.aws_ami.db_ami.id
-  instance_type = var.ami_type
-  availability_zone = var.dbserver_az
+# Launch Template Configuration
+resource "aws_launch_template" "webserver-template" {
+  image_id                             = data.aws_ami.web_ami.id
+  instance_type                        = var.ami_type
+  vpc_security_group_ids               = [var.webserver_secgrp_id]
+  
+  placement {
+    availability_zone = var.webserver_az
+  }
 
-  subnet_id                   = var.db_subnet_id
-  vpc_security_group_ids      = [var.db_secgrp_id]
-  associate_public_ip_address = false
+  network_interfaces {
+    associate_public_ip_address = true
+  }
 
+  tags = {
+    Name = "Webserver"
+  }
+}
+
+resource "aws_launch_template" "dbserver-template" {
+  image_id                             = data.aws_ami.db_ami.id
+  instance_type                        = var.ami_type
+  vpc_security_group_ids               = [var.db_secgrp_id]
   key_name = aws_key_pair.dbkp.key_name
+  
+  placement {
+    availability_zone = var.dbserver_az
+  }
+
+  network_interfaces {
+    associate_public_ip_address = false
+  }
 
   tags = {
     Name = "DBserver"
+  }
+}
+
+resource "aws_autoscaling_group" "web_asg" {
+  availability_zones        = [var.webserver_az]
+  vpc_zone_identifier       = [var.webserver_subnet_id]
+
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.webserver-template.id
+    version = "$Latest"
+  }
+}
+
+resource "aws_autoscaling_group" "db_asg" {
+  availability_zones        = [var.dbserver_az]
+  vpc_zone_identifier       = [var.db_subnet_id]
+
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.dbserver-template.id
+    version = "$Latest"
   }
 }

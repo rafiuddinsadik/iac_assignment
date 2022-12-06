@@ -44,12 +44,15 @@ pipeline{
             }
         }
 
+        stage("Infra init"){
+            steps {
+                sh "terraform init"
+            }
+        }
+
         stage("Infra Planning"){
             steps {
-                sh '''
-                    terraform init
-                    terraform plan
-                '''
+                sh "terraform plan"
             }
         }
 
