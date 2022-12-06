@@ -48,8 +48,6 @@ resource "aws_launch_template" "webserver-template" {
     availability_zone = var.webserver_az
   }
 
-  associate_public_ip_address = true
-
   tags = {
     Name = "Webserver"
   }
@@ -64,8 +62,6 @@ resource "aws_launch_template" "dbserver-template" {
   placement {
     availability_zone = var.dbserver_az
   }
-  
-  associate_public_ip_address = false
   
   tags = {
     Name = "DBserver"
