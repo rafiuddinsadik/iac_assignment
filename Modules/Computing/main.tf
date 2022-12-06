@@ -77,7 +77,6 @@ resource "aws_launch_template" "dbserver-template" {
 }
 
 resource "aws_autoscaling_group" "web_asg" {
-  availability_zones        = [var.webserver_az]
   vpc_zone_identifier       = [var.webserver_subnet_id]
 
   desired_capacity   = 1
@@ -91,7 +90,6 @@ resource "aws_autoscaling_group" "web_asg" {
 }
 
 resource "aws_autoscaling_group" "db_asg" {
-  availability_zones        = [var.dbserver_az]
   vpc_zone_identifier       = [var.db_subnet_id]
 
   desired_capacity   = 1
