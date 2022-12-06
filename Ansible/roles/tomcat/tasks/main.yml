@@ -17,7 +17,7 @@
 
 - name: download & unarchive tomcat
   unarchive:
-    src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.69/bin/apache-tomcat-9.0.69.tar.gz
+    src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
     dest: /opt/tomcat
     remote_src: yes
     extra_opts: [--strip-components=1]
@@ -36,13 +36,6 @@
     src: tomcat.service.j2
     dest: /etc/systemd/system/tomcat.service
     mode: 0755
-
-# - name: Copy Built Artifact from local to remote
-#   copy:
-#     src: /var/lib/jenkins/workspace/assignment_deployment/Ansible/myproject-1.war
-#     dest: /opt/tomcat/webapps/hello.war
-#     mode: 0755
-#     remote_src: yes
 
 - name: copy artifact to target node
   synchronize:
