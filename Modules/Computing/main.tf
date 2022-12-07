@@ -81,8 +81,10 @@ resource "aws_autoscaling_group" "web_asg" {
     version = "$Latest"
   }
 
-  tags = {
-    Name = "Webserver-spring"
+  tag {
+    key                 = "Name"
+    value               = "Webserver-spring"
+    propagate_at_launch = true
   }
 }
 
@@ -98,7 +100,9 @@ resource "aws_autoscaling_group" "db_asg" {
     version = "$Latest"
   }
 
-  tags = {
-    Name = "DBserver-mysql"
+  tag {
+    key                 = "Name"
+    value               = "DBserver-mysql"
+    propagate_at_launch = true
   }
 }
