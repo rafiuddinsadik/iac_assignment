@@ -68,6 +68,7 @@ resource "aws_launch_template" "dbserver-template" {
   }
 }
 
+# Auto Scaling Group Configuration
 resource "aws_autoscaling_group" "web_asg" {
   vpc_zone_identifier       = [var.webserver_subnet_id]
 
@@ -78,6 +79,10 @@ resource "aws_autoscaling_group" "web_asg" {
   launch_template {
     id      = aws_launch_template.webserver-template.id
     version = "$Latest"
+  }
+
+  tags = {
+    Name = "Webserver-spring"
   }
 }
 
@@ -91,5 +96,9 @@ resource "aws_autoscaling_group" "db_asg" {
   launch_template {
     id      = aws_launch_template.dbserver-template.id
     version = "$Latest"
+  }
+
+  tags = {
+    Name = "DBserver-mysql"
   }
 }
