@@ -36,7 +36,7 @@ pipeline{
                     stage('AMI Build') {
                         steps {
                             dir("Packer"){
-                                sh "packer build -var 'type=${TYPES}' packer.json"
+                                sh "packer build -var 'type=${TYPES}' packer.json.pkr.hcl"
                             }
                         }
                     }
