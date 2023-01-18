@@ -1,5 +1,9 @@
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
+variable "type" {
+  type = string
+}
+
 source "amazon-ebs" "source_ami" {
   ami_name      = "spring-${var.type}-${local.timestamp}"
   instance_type = "t2.micro"
