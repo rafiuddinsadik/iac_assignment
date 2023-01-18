@@ -19,10 +19,10 @@
       state: present
 
   - name: Download MySQL Community Edition
-  ansible.builtin.get_url:
-    url: https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
-    dest: /etc/mysql.rpm
-    mode: '0644'
+    ansible.builtin.get_url:
+      url: https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+      dest: /etc/mysql.rpm
+      mode: '0644'
 
   - name: Install MySQL Community Edition
     ansible.builtin.yum:
